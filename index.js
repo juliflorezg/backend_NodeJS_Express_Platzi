@@ -46,6 +46,49 @@ app.get('/categories/:categoryId/products/:productId', (req, res) => {
   })
 })
 
+const hardCodedCategories = [
+  {
+    id: '10001',
+    name: 'tech',
+    products: [],
+  },
+  {
+    id: '10002',
+    name: 'home',
+    products: [],
+  },
+  {
+    id: '10003',
+    name: 'kitchen',
+    products: [],
+  },
+  {
+    id: '10004',
+    name: 'fitness',
+    products: [],
+  },
+]
+
+app.get('/categories', (req, res) => {
+  res.json(hardCodedCategories)
+})
+
+app.get('/categories/:categoryId', (req, res) => {
+  const { categoryId } = req.params
+
+  const categoryRequested = hardCodedCategories.find(
+    category => category.id === categoryId
+  )
+
+  if (!categoryRequested) {
+    res.status(404).send({
+      message: "couldn't find a category for the id requested",
+    })
+  } else {
+    res.json(categoryRequested)
+  }
+})
+
 //decirle que escuche en un puerto especifico
 app.listen(port, () => {
   console.log('Escuchando en el puerto', port)
