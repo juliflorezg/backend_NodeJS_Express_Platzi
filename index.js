@@ -3,6 +3,7 @@ console.log('hellooooo')
 const express = require('express')
 const app = express()
 const port = 3000
+const { faker } = require('@faker-js/faker')
 
 //definir ruta
 app.get('/', (req, res) => {
@@ -15,16 +16,23 @@ app.get('/nueva-ruta', (req, res) => {
 
 //enviar JSON como respuesta
 app.get('/products', (req, res) => {
-  res.json([
-    {
-      name: 'product 1',
-      price: 500,
-    },
-    {
-      name: 'product 2',
-      price: 2000,
-    },
-  ])
+  const products = []
+  const { size } = req.query
+  const limit = size ?? 10
+
+  for (let i = 0; i < limit; i++) {
+    products.push({
+      name: faker.commerce.productName(),
+      price: Number(faker.commerce.price()),
+      image: faker.image.imageUrl(),
+    })
+  }
+  res.json(products)
+})
+
+//* aquí arriba si funciona este endpoint
+app.get('/products/filter', (req, res) => {
+  res.send('Yo soy un filter')
 })
 
 // dos puntos para decir que es un parámetro
@@ -37,6 +45,12 @@ app.get('/products/:id', (req, res) => {
     price: 500,
   })
 })
+
+//! poner este endpoint especifico debajo del dinámico de arriba es un error porque va a tomar filter como un id y va a retornar lo del endpoint de arriba.
+// //! para que funcione, hay que poner el endpoint especifico arriba del dinámico.
+//// app.get('/products/filter', (req, res) => {
+////   res.send('Yo soy un filter')
+//// })
 
 app.get('/categories/:categoryId/products/:productId', (req, res) => {
   const { categoryId, productId } = req.params
@@ -86,6 +100,20 @@ app.get('/categories/:categoryId', (req, res) => {
     })
   } else {
     res.json(categoryRequested)
+  }
+})
+
+// http://localhost:3000/users?limit=10&offset=200
+app.get('/users', (req, res) => {
+  const { limit, offset } = req.query
+
+  if (limit && offset) {
+    res.json({
+      limit,
+      offset,
+    })
+  } else {
+    res.send('No hay parametros')
   }
 })
 
