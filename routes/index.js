@@ -1,11 +1,16 @@
+const express = require('express')
 const productsRouter = require('./products')
 const usersRouter = require('./users')
 const categoriesRouter = require('./categories')
 
 function appRoutes(app) {
-  app.use('/products', productsRouter)
-  app.use('/users', usersRouter)
-  app.use('/categories', categoriesRouter)
+  const router = express.Router()
+
+  // lo siguiente equivale a http://localhost:3000/api/v1/categories
+  app.use('/api/v1', router)
+  router.use('/products', productsRouter)
+  router.use('/users', usersRouter)
+  router.use('/categories', categoriesRouter)
 }
 
 module.exports = appRoutes
