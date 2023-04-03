@@ -32,12 +32,10 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   const body = req.body
+  const productCreated = service.create(body)
 
   // si no ponemos un middleware en index.js, no va a mostrar la data
-  res.status(201).json({
-    message: 'created',
-    data: body,
-  })
+  res.status(201).json(productCreated)
 })
 
 router.patch('/:id', (req, res) => {
