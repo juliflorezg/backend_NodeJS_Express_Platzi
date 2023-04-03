@@ -1,20 +1,11 @@
 const express = require('express')
-const { faker } = require('@faker-js/faker')
 const router = express.Router()
+const ProductsService = require('./../services/product.service')
+const service = new ProductsService()
 
 //enviar JSON como respuesta
 router.get('/', (req, res) => {
-  const products = []
-  const { size } = req.query
-  const limit = size ?? 10
-
-  for (let i = 0; i < limit; i++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: Number(faker.commerce.price()),
-      image: faker.image.imageUrl(),
-    })
-  }
+  const products = service.find()
   res.json(products)
 })
 
@@ -28,17 +19,9 @@ router.get('/filter', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params
 
-  if (id === '999') {
-    res.status(404).json({
-      message: 'not found',
-    })
-  } else {
-    res.status(200).json({
-      id,
-      name: 'product 1',
-      price: 500,
-    })
-  }
+  const product = service.findOne(id)
+
+  res.json(product)
 })
 
 //! poner este endpoint especifico debajo del dinámico de arriba es un error porque va a tomar filter como un id y va a retornar lo del endpoint de arriba.
