@@ -27,11 +27,18 @@ router.get('/filter', (req, res) => {
 // en este caso va a devolver el producto 1 con el id que le pasemos (hardcodeado, quemado)
 router.get('/:id', (req, res) => {
   const { id } = req.params
-  res.json({
-    id,
-    name: 'product 1',
-    price: 500,
-  })
+
+  if (id === '999') {
+    res.status(404).json({
+      message: 'not found',
+    })
+  } else {
+    res.status(200).json({
+      id,
+      name: 'product 1',
+      price: 500,
+    })
+  }
 })
 
 //! poner este endpoint especifico debajo del dinámico de arriba es un error porque va a tomar filter como un id y va a retornar lo del endpoint de arriba.
@@ -44,7 +51,7 @@ router.post('/', (req, res) => {
   const body = req.body
 
   // si no ponemos un middleware en index.js, no va a mostrar la data
-  res.json({
+  res.status(201).json({
     message: 'created',
     data: body,
   })
