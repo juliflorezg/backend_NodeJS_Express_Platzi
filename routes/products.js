@@ -16,12 +16,16 @@ router.get('/filter', (req, res) => {
 
 // dos puntos para decir que es un parámetro
 // en este caso va a devolver el producto 1 con el id que le pasemos (hardcodeado, quemado)
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
 
-  const product = await service.findOne(id)
+    const product = await service.findOne(id)
 
-  res.json(product)
+    res.json(product)
+  } catch (error) {
+    next(error)
+  }
 })
 
 //! poner este endpoint especifico debajo del dinámico de arriba es un error porque va a tomar filter como un id y va a retornar lo del endpoint de arriba.

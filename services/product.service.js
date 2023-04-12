@@ -37,6 +37,8 @@ class ProductsService {
     })
   }
   async findOne(id) {
+    // esto es para probar los middleware de tipo error:
+    const name = this.getTotal()
     const product = this.products.find(product => product.id === id)
 
     return product
