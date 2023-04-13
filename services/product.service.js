@@ -1,4 +1,5 @@
 const { faker } = require('@faker-js/faker')
+const boom = require('@hapi/boom')
 
 class ProductsService {
   constructor() {
@@ -15,6 +16,7 @@ class ProductsService {
         name: faker.commerce.productName(),
         price: Number(faker.commerce.price()),
         image: faker.image.imageUrl(),
+        isBlocked: faker.datatype.boolean(),
       })
     }
   }
@@ -38,8 +40,15 @@ class ProductsService {
   }
   async findOne(id) {
     // esto es para probar los middleware de tipo error:
-    const name = this.getTotal()
+    //// const name = this.getTotal()
     const product = this.products.find(product => product.id === id)
+
+    if (!product) {
+      throw boom.notFound('Product not found')
+    }
+    if (product.isBlocked) {
+      throw boom.conflict('This product is blocked')
+    }
 
     return product
   }
@@ -47,7 +56,8 @@ class ProductsService {
     const index = this.products.findIndex(product => product.id === id)
 
     if (index === -1) {
-      throw new Error('product not found')
+      // throw new Error('product not found')
+      throw boom.notFound('Product not found')
     }
     this.products[index] = { ...this.products[index], ...changes }
 
@@ -58,7 +68,8 @@ class ProductsService {
     const index = this.products.findIndex(product => product.id === id)
 
     if (index === -1) {
-      throw new Error('product not found')
+      // throw new Error('product not found')
+      throw boom.notFound('Product not found')
     }
     this.products.splice(index, 1)
 

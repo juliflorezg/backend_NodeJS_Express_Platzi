@@ -4,7 +4,11 @@ const express = require('express')
 const app = express()
 const port = 3000
 const appRoutes = require('./routes')
-const { logErrors, errorHandler } = require('./middlewares/error.handler')
+const {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+} = require('./middlewares/error.handler')
 
 // definir middleware para que muestre la info por POST
 // una vez hecho esto, ya va a salir la info en Insomnia
@@ -27,4 +31,5 @@ app.listen(port, () => {
 appRoutes(app)
 
 app.use(logErrors)
+app.use(boomErrorHandler)
 app.use(errorHandler)

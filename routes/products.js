@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
   res.status(201).json(productCreated)
 })
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res, next) => {
   try {
     const body = req.body
     const { id } = req.params
@@ -50,9 +50,10 @@ router.patch('/:id', async (req, res) => {
 
     res.json(updatedProduct)
   } catch (error) {
-    res.status(404).json({
-      message: error.message,
-    })
+    // res.status(404).json({
+    //   message: error.message,
+    // })
+    next(error)
   }
 })
 router.delete('/:id', async (req, res) => {
