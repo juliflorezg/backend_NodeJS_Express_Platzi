@@ -17,5 +17,3 @@ function validatorHandler(schema, property) {
 }
 
 module.exports = validatorHandler
-
-useState<Record<String,String>>
