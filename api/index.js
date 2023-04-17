@@ -1,6 +1,7 @@
 console.log('hellooooo')
 
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3000
 const appRoutes = require('./routes')
@@ -29,11 +30,11 @@ const options = {
 app.use(cors(options))
 
 // definir ruta
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('hola, mi servidor en express')
 })
 
-app.get('/nueva-ruta', (req, res) => {
+app.get('/api/nueva-ruta', (req, res) => {
   res.send('hola, soy una nueva rutaa')
 })
 
