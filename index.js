@@ -2,7 +2,7 @@ console.log('hellooooo')
 
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 const appRoutes = require('./routes')
 const {
   logErrors,
@@ -13,6 +13,20 @@ const {
 // definir middleware para que muestre la info por POST
 // una vez hecho esto, ya va a salir la info en Insomnia
 app.use(express.json())
+
+// usar cors
+const whitelist = ['http://localhost:8000', 'https://myapp.co']
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true)
+    } else {
+      callback(new Error('No permitido'))
+    }
+  },
+}
+
+app.use(cors(options))
 
 // definir ruta
 app.get('/', (req, res) => {
